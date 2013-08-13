@@ -1,4 +1,1 @@
-util
-====
-
-Utility classes with no dependencies
+# Just some utility classes
