@@ -730,13 +730,27 @@ class QueryObject implements QueryObjectInterface
   }
 
   /**
+   * Add quotes to non-numeric values.
+   *
+   * @param mixed $value value
+   * @return mixed
+   */
+  public static function quote($value)
+  {
+    if (! is_numeric($value)) {
+      $value = "'{$value}'";
+    }
+    return $value;
+  }
+
+  /**
    * Build an INSERT's fields/values part of the query
    *
    * @param array $data associative array of field/value pairs
    * @param string|bool|null $wildcard wildcard used for substitution in prepared statements
    * @return string
    */
-  public static function buildInsert($data, $wildcard = null)
+  public static function buildInsert($data, $wildcard = false)
   {
     $fields = array();
     $values = array();
@@ -745,7 +759,7 @@ class QueryObject implements QueryObjectInterface
       $fields[] = "`$k`";
 
       if ($wildcard === false) {
-        $values[] = $this->quote($v);
+        $values[] = self::quote($v);
       }
       elseif (is_string($wildcard)) {
         $values[] = $wildcard;
@@ -765,13 +779,13 @@ class QueryObject implements QueryObjectInterface
    * @param string|bool|null $wildcard wildcard used for substitution in prepared statements
    * @return string
    */
-  public static function buildUpdate($data, $wildcard = null)
+  public static function buildUpdate($data, $wildcard = false)
   {
     $fields = array();
 
     foreach ($data as $k => $v) {
       if ($wildcard === false) {
-        $v = $this->quote($v);
+        $v = self::quote($v);
         $fields[] = "`$k` = $v";
       }
       elseif (is_string($wildcard)) {
@@ -802,7 +816,7 @@ class QueryObject implements QueryObjectInterface
     $values = (array) $values;
 
     foreach ($values as &$value) {
-      $value = $this->quote($value);
+      $value = self::quote($value);
     }
 
     $s = "`{$field}`";
