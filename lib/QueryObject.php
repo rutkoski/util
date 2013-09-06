@@ -420,7 +420,7 @@ class QueryObject implements QueryObjectInterface
       $this->limit = null;
     }
     else {
-      $this->limit = intval($limit);
+      $this->limit = is_numeric($limit) ? intval($limit) : $limit;
 
       $this->__sql = null;
     }
@@ -441,7 +441,7 @@ class QueryObject implements QueryObjectInterface
       $this->offset = null;
     }
     else {
-      $this->offset = intval($offset);
+      $this->offset = is_numeric($offset) ? intval($offset) : $offset;
 
       $this->__sql = null;
     }
