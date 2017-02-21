@@ -819,6 +819,8 @@ class QueryObject implements QueryObjectInterface
       $value = self::quote($value);
     }
 
+    $field = str_replace('.', '`.`', $field);
+
     $s = "`{$field}`";
 
     $value = implode(', ', $values);
